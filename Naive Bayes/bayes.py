@@ -92,8 +92,8 @@ def trainNB0(trainMatrix,trainCategory):
 	numTrainDocs = len(trainMatrix)							#计算训练的文档数目
 	numWords = len(trainMatrix[0])							#计算每篇文档的词条数
 	pAbusive = sum(trainCategory)/float(numTrainDocs)		#文档属于侮辱类的概率
-	p0Num = np.zeros(numWords); p1Num = np.zeros(numWords)	#创建numpy.zeros数组,
-	p0Denom = 0.0; p1Denom = 0.0                        	#分母初始化为0.0
+	p0Num = np.ones(numWords); p1Num = np.ones(numWords)	#创建numpy.zeros数组,
+	p0Denom = 2; p1Denom = 2                        	#分母初始化为0.0
 	for i in range(numTrainDocs):
 		if trainCategory[i] == 1:							#统计属于侮辱类的条件概率所需的数据，即P(w0|1),P(w1|1),P(w2|1)···
 			p1Num += trainMatrix[i]
@@ -101,8 +101,8 @@ def trainNB0(trainMatrix,trainCategory):
 		else:												#统计属于非侮辱类的条件概率所需的数据，即P(w0|0),P(w1|0),P(w2|0)···
 			p0Num += trainMatrix[i]
 			p0Denom += sum(trainMatrix[i])
-	p1Vect = p1Num/p1Denom									#相除        
-	p0Vect = p0Num/p0Denom          
+	p1Vect = np.log(p1Num/p1Denom)								#相除
+	p0Vect = np.log(p0Num/p0Denom)
 	return p0Vect,p1Vect,pAbusive							#返回属于侮辱类的条件概率数组，属于非侮辱类的条件概率数组，文档属于侮辱类的概率
 
 """
@@ -124,8 +124,8 @@ Modify:
 	2017-08-12
 """
 def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):
-	p1 = reduce(lambda x,y:x*y, vec2Classify * p1Vec) * pClass1    			#对应元素相乘
-	p0 = reduce(lambda x,y:x*y, vec2Classify * p0Vec) * (1.0 - pClass1)
+	p1 = sum(vec2Classify * p1Vec)+np.log(pClass1)  			#对应元素相乘
+	p0 = sum(vec2Classify * p0Vec)+np.log(1.0 - pClass1)
 	print('p0:',p0)
 	print('p1:',p1)
 	if p1 > p0:
@@ -154,7 +154,7 @@ def testingNB():
 	for postinDoc in listOPosts:
 		trainMat.append(setOfWords2Vec(myVocabList, postinDoc))				#将实验样本向量化
 	p0V,p1V,pAb = trainNB0(np.array(trainMat),np.array(listClasses))		#训练朴素贝叶斯分类器
-	testEntry = ['love', 'my', 'dalmation']									#测试样本1
+	testEntry = ['dog', 'love', 'my']									#测试样本1
 	thisDoc = np.array(setOfWords2Vec(myVocabList, testEntry))				#测试样本向量化
 	if classifyNB(thisDoc,p0V,p1V,pAb):
 		print(testEntry,'属于侮辱类')										#执行分类并打印分类结果

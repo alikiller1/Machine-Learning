@@ -54,13 +54,16 @@ y1=np.mat(y1)
 binarizer = preprocessing.Binarizer().fit(x1)
 x1_binarizer=binarizer.transform(x1);
 
+
 clf2.fit(x1_binarizer,y1.T)
+#clf2.fit(x1,y1.T)
 test2=np.mat([[1,1,1],[0,0,0],[3,3,3],[1,3,5],[0,2,3]])
 
 test2_binarizer=binarizer.transform(test2);
 
 print("{{{{{{{{{{{{{{{{{{{")
 print(clf2.predict(test2_binarizer))
+#print(clf2.predict(test2))
 
 print('==============================')
 print(x1.max(axis=0))

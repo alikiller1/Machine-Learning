@@ -30,7 +30,7 @@ if __name__ == '__main__':
 		lenses_pd[col] = le.fit_transform(lenses_pd[col])
 	# print(lenses_pd)														#打印编码信息
 
-	clf = tree.DecisionTreeClassifier(max_depth = 4)						#创建DecisionTreeClassifier()类
+	clf = tree.DecisionTreeClassifier(max_depth = 6)						#创建DecisionTreeClassifier()类
 	clf = clf.fit(lenses_pd.values.tolist(), lenses_target)					#使用数据，构建决策树
 
 	dot_data = StringIO()
@@ -40,6 +40,7 @@ if __name__ == '__main__':
 						filled=True, rounded=True,
 						special_characters=True)
 	graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
+	print(dot_data.getvalue());
 	graph.write_pdf("tree.pdf")												#保存绘制好的决策树，以PDF的形式存储。
 
 	print(clf.predict([[1,1,1,0]]))											#预测

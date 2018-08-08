@@ -406,6 +406,7 @@ if __name__ == '__main__':
 	dataSet, labels = createDataSet()
 	featLabels = []
 	myTree = createTree(dataSet, labels, featLabels)
+	print(featLabels)
 	testVec = [0,1]										#测试数据
 	result = classify(myTree, featLabels, testVec)
 	if result == 'yes':
