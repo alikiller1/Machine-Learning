@@ -180,7 +180,6 @@ if __name__ == '__main__':
 	stopwords_file = './stopwords_cn.txt'
 	stopwords_set = MakeWordsSet(stopwords_file)
 
-
 	test_accuracy_list = []
 	deleteNs = range(0, 1000, 20)				#0 20 40 60 ... 980
 	for deleteN in deleteNs:
@@ -194,6 +193,8 @@ if __name__ == '__main__':
 
 	plt.figure()
 	plt.plot(deleteNs, test_accuracy_list)
+	print('max score', max(test_accuracy_list))
+	print('max score index', (test_accuracy_list.index(max(test_accuracy_list))-1)*20)
 	plt.title('Relationship of deleteNs and test_accuracy')
 	plt.xlabel('deleteNs')
 	plt.ylabel('test_accuracy')
