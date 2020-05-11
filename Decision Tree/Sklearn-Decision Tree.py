@@ -3,9 +3,10 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.externals.six import StringIO
 from sklearn import tree
 import pandas as pd
-import numpy as np
 import pydotplus
-
+import os
+import graphviz
+os.environ["PATH"] += os.pathsep + 'D:/util/graphviz-2.38/release/bin'
 if __name__ == '__main__':
 	with open('lenses.txt', 'r') as fr:										#加载文件
 		lenses = [inst.strip().split('\t') for inst in fr.readlines()]		#处理文件
@@ -14,7 +15,7 @@ if __name__ == '__main__':
 		lenses_target.append(each[-1])
 	# print(lenses_target)
 
-	lensesLabels = ['age', 'prescript', 'astigmatic', 'tearRate']			#特征标签		
+	lensesLabels = ['第一列', '第二列', 'astigmatic', 'tearRate']			#特征标签
 	lenses_list = []														#保存lenses数据的临时列表
 	lenses_dict = {}														#保存lenses数据的字典，用于生成pandas
 	for each_label in lensesLabels:											#提取信息，生成字典
@@ -39,7 +40,9 @@ if __name__ == '__main__':
 						class_names = clf.classes_,
 						filled=True, rounded=True,
 						special_characters=True)
-	graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
+	# graph = pydotplus.graph_from_dot_data(dot_data.getvalue());
+	#下面这列解决中文乱码
+	graph = pydotplus.graph_from_dot_data(dot_data.getvalue().replace('helvetica','"Microsoft YaHei"'));
 	print(dot_data.getvalue());
 	graph.write_pdf("tree.pdf")												#保存绘制好的决策树，以PDF的形式存储。
 
