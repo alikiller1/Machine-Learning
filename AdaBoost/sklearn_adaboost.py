@@ -2,6 +2,7 @@
 import numpy as np
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.externals import joblib
 
 """
 Author:
@@ -34,6 +35,7 @@ if __name__ == '__main__':
 	testArr, testLabelArr = loadDataSet('horseColicTest2.txt')
 	bdt = AdaBoostClassifier(DecisionTreeClassifier(max_depth = 2), algorithm = "SAMME", n_estimators = 10)
 	bdt.fit(dataArr, classLabels)
+
 	predictions = bdt.predict(dataArr)
 	errArr = np.mat(np.ones((len(dataArr), 1)))
 	print('训练集的错误率:%.3f%%' % float(errArr[predictions != classLabels].sum() / len(dataArr) * 100))
